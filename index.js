@@ -56,8 +56,9 @@ function handleClick(event) {
         symbol.textContent='Click the Reset Button to play again';
         i2 = i2 + 1;
     } else if (totalMoves === 9) { 
-        console.log('It\'s a draw!');
-        
+        welcome.textContent='🏳️It\'s a draw!🏳️';
+        welcome.style.color='white';
+        symbol.textContent='Click the Reset Button to play again';
     }
 }
 
