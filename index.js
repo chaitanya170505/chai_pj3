@@ -1,14 +1,14 @@
-var welcome=document.getElementById('Welcome');
-var welcome_html=welcome.innerHTML;
-var symbol=document.getElementById('symbol');
+var welcome = document.getElementById('Welcome');
+var welcome_html = welcome.innerHTML;
+var symbol = document.getElementById('symbol');
 
-
-var button = [];//for setting button to an array
-var currentPlayer = 'X';//setting first player to x
-var play1_score = document.getElementById('play1');//player 2 score
-var play2_score = document.getElementById('play2');//player 1 score
-var winningButtons = [];//winning button array
+var button = []; // for setting button to an array
+var currentPlayer = 'X'; // setting first player to x
+var play1_score = document.getElementById('play1'); // player 2 score
+var play2_score = document.getElementById('play2'); // player 1 score
+var winningButtons = []; // winning button array
 var totalMoves = 0; // Variable to keep track of total moves
+var gameOver = false; // Variable to track if the game is over
 
 for (var i = 1; i <= 9; i++) {
     button.push(document.getElementById('button' + i));
@@ -20,11 +20,13 @@ var i1 = 1;
 var i2 = 1;
 
 function handleClick(event) {
+    if (gameOver) return; // return if game is over
+    
     playClickSound();
     var button = event.target;
     if (button.textContent === '') {
         button.textContent = currentPlayer;
-        totalMoves++; 
+        totalMoves++;
 
         if (currentPlayer === 'X') {
             currentPlayer = 'O';
@@ -43,22 +45,26 @@ function handleClick(event) {
         console.log('Player 1 wins!');
         play1_score.textContent = i1;
         colorWinningButtons(winningButtons);
-        welcome.textContent='Player 1 wins 🏳️';
-        welcome.style.color='red';
-        symbol.textContent='Click the Reset Button to play again';
+        welcome.textContent = 'Player 1 wins 🏳️';
+        welcome.style.color = 'red';
+        symbol.textContent = 'Click the Reset Button to play again';
         i1 = i1 + 1;
+        gameOver = true; // Set game over
     } else if (checkWinCondition('O')) {
         console.log('Player 2 wins!');
         play2_score.textContent = i2;
         colorWinningButtons(winningButtons);
-        welcome.textContent='Player 2 wins 🏳️';
-        welcome.style.color='rgb(5, 250, 5)';
-        symbol.textContent='Click the Reset Button to play again';
+        welcome.textContent = 'Player 2 wins 🏳️';
+        welcome.style.color = 'rgb(5, 250, 5)';
+        symbol.textContent = 'Click the Reset Button to play again';
         i2 = i2 + 1;
-    } else if (totalMoves === 9) { 
-        welcome.textContent='🏳️It\'s a draw!🏳️';
-        welcome.style.color='white';
-        symbol.textContent='Click the Reset Button to play again';
+        gameOver = true; // Set game over
+    } else if (totalMoves === 9) {
+        console.log('It\'s a draw!');
+        welcome.textContent = '🏳️It\'s a draw!🏳️';
+        welcome.style.color = 'white';
+        symbol.textContent = 'Click the Reset Button to play again';
+        gameOver = true; // Set game over
     }
 }
 
@@ -70,7 +76,7 @@ function colorWinningButtons(winningButtons) {
 
 function checkWinCondition(mark) {
     //rows
-    
+
     for (var i = 0; i < 3; i++) {
         if (button[i * 3].textContent === mark &&
             button[i * 3].textContent === button[i * 3 + 1].textContent &&
@@ -117,17 +123,18 @@ function reset() {
     for (var i = 0; i < button.length; i++) {
         button[i].textContent = '';
     }
-    
-    welcome.innerHTML=welcome_html;
-    welcome.style.color='white';
-    symbol.textContent='First Player starts as Player X And Second Player as Player O';
+
+    welcome.innerHTML = welcome_html;
+    welcome.style.color = 'white';
+    symbol.textContent = 'First Player starts as Player X And Second Player as Player O';
     currentPlayer = 'X'; // Reseting current player to X
     totalMoves = 0; // Reseting total moves
     winningButtons = []; // Reseting winning array
+    gameOver = false; // Reset game over status
 
     // Reseting text color
     for (var i = 0; i < button.length; i++) {
-        button[i].style.color = ''; 
+        button[i].style.color = '';
     }
 
 }
@@ -142,6 +149,3 @@ function playReset() {
     var audio = new Audio('./assets/reset.mp3');
     audio.play();
 }
-
-
-
